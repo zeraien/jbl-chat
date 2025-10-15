@@ -1,0 +1,14 @@
+<span class='text-nowrap'>
+    <b>{{ message.created|time }}</b>
+    &ensp;
+    <small title="{{message.created|date}}">{{message.created|timesince}}</small>
+</span>
+{#    if message.read_at == null#}
+{#        |&ensp;#}
+{#        span.glyphicon.glyphicon-asterisk.text-warning#}
+
+{#    if message.delivered_at#}
+{#        |&ensp;#}
+{#        span.glyphicon.glyphicon-ok-circle.text-muted(rel="tooltip", title="{% blocktrans with timestamp=message.delivered_at %}delivered at {{timestamp}}{%endblocktrans%}")#}
+<span class='nowrap'>
+</span>

@@ -1,0 +1,6 @@
+Django~=5.2  # https://www.djangoproject.com/
+djangorestframework~=3.16  # https://github.com/encode/django-rest-framework
+django-extensions~=4.1
+django-viewflow~=2.2
+ipython
+django-htmx~=1.2
