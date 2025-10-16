@@ -2,6 +2,13 @@
 {% load url_framework %}
 
 {% block main %}
+    <div hx-ext="ws" ws-connect="ws://localhost:8888/"
+     hx-on::ws-open="this.querySelector('form').requestSubmit()"
+    >
+          <form hx-ws="send">
+            <input type="hidden" name="token" value="{{ websockets_token }}">
+          </form>
+    </div>
     <div class='row' style='height: 100vh; max-height: 100vh'>
         <div class='col-md-3'>
             <div class="list-group">

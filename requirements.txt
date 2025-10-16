@@ -4,3 +4,7 @@ django-extensions~=4.1
 django-viewflow~=2.2
 ipython
 django-htmx~=1.2
+django-sesame~=3.2
+websockets~=15.0
+django-redis~=6.0.*
+redis==6.4.*

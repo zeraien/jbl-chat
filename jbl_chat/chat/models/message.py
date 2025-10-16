@@ -1,4 +1,4 @@
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.template.defaultfilters import truncatewords
 from django_extensions.db.models import TimeStampedModel
 from django.utils.translation import gettext as _
@@ -26,7 +26,7 @@ class Message(TimeStampedModel):
         ordering = ["created"]
 
     author = models.ForeignKey(
-        User,
+        get_user_model(),
         verbose_name=_("author"),
         related_name="authored_messages",
         on_delete=models.CASCADE,

@@ -1,4 +1,3 @@
-from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 from django_url_framework import ActionController
 from django_url_framework.decorators import json_action, login_required
@@ -38,7 +37,7 @@ class MessageController(ActionController):
     @json_action()
     def api__get(self, request, id: int):
         message: Message = get_object_or_404(self.messages, pk=id)
-        author: User = message.author
+        author = message.author
 
         return {
             "author": {"id": author.pk, "name": author.get_full_name()},
