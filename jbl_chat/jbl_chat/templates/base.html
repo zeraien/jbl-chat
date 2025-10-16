@@ -16,8 +16,10 @@
 {#    {% htmx_script %}#}
     <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.7/dist/htmx.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/htmx-ext-ws@2.0.3/ws.min.js"></script>
+    <script src="https://unpkg.com/idiomorph@0.7.3/dist/idiomorph-ext.min.js" integrity="sha384-szktAZju9fwY15dZ6D2FKFN4eZoltuXiHStNDJWK9+FARrxJtquql828JzikODob" crossorigin="anonymous"></script>
+{#    <script src="https://unpkg.com/htmx-ext-morphdom-swap@2.0.0/morphdom-swap.js"></script>#}
 </head>
-<body hx-ext="ws" hx-headers='{"X-Requested-With": "XMLHttpRequest", "x-csrftoken": "{{ csrf_token }}"}'>
+<body hx-ext="ws,morph" hx-headers='{"X-Requested-With": "XMLHttpRequest", "x-csrftoken": "{{ csrf_token }}"}'>
     <div class="container">
         {% block main %}
         {% endblock main %}
