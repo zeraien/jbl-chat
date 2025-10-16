@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-
+from django.contrib.auth import get_user_model
 from redis import asyncio as aioredis
 import asyncio
 import json
@@ -26,11 +26,12 @@ def get_conversations(user):
     return set(list(user.conversations.all().values_list("pk", flat=True)))
 
 
-def get_rendered_message_list(conversation_id: int):
+def get_rendered_message_list(conversation_id: int, user_id: int):
     conversation: Conversation = Conversation.objects.get(pk=conversation_id)
     template = get_template("message/_ws_list.html")
     return template.render(
         context={
+            "user": get_user_model().objects.get(pk=user_id),
             "conversation": conversation,
             "messages": conversation.messages.not_deleted().not_drafts(),
         }
@@ -75,17 +76,28 @@ async def process_events():
         payload = message["data"].decode()
 
         event = json.loads(payload)
-        recipients = (
-            websocket
-            for websocket, connection in CONNECTIONS.items()
-            if connection["user_id"] in event["target_ids"]
-        )
+        websockets_by_user = {}
 
-        print("Sending conversation %s.." % event["conversation_id"])
-        html = await asyncio.to_thread(
-            get_rendered_message_list, event["conversation_id"]
-        )
-        broadcast(recipients, html)
+        for websocket, connection in CONNECTIONS.items():
+            if connection["user_id"] in event["target_ids"]:
+                i = websockets_by_user.get(connection["user_id"], {})
+                ws_list = i.get("websockets", [])
+                ws_list.append(websocket)
+                i["websockets"] = ws_list
+
+                if "html" not in i:
+                    i["html"] = await asyncio.to_thread(
+                        get_rendered_message_list,
+                        event["conversation_id"],
+                        connection["user_id"],
+                    )
+                websockets_by_user[connection["user_id"]] = i
+        for user_id, data in websockets_by_user.items():
+            print(
+                "Sending conversation %s to user %s.."
+                % (event["conversation_id"], user_id)
+            )
+            broadcast(data["websockets"], data["html"])
 
 
 async def main():
