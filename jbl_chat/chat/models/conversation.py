@@ -5,7 +5,25 @@ from django.utils.translation import gettext as _
 from django.db import models
 
 
+class ConversationManager(models.QuerySet):
+    def get_or_create_for_users(self, users: list["User"]):
+        ids = [u.pk for u in users]
+        conversations = self.annotate(convo_count=models.Count("users")).filter(
+            convo_count=len(ids)
+        )
+        for user_id in ids:
+            conversations = conversations.filter(users__id=user_id)
+
+        if conversations.count():
+            return conversations.first()
+        else:
+            conversation = self.create()
+            conversation.users.set(users)
+            return conversation
+
+
 class Conversation(TimeStampedModel):
+    objects = ConversationManager.as_manager()
     title = models.CharField(_("title"), max_length=100, blank=True)
     users = models.ManyToManyField(
         User, verbose_name=_("users"), related_name="conversations"

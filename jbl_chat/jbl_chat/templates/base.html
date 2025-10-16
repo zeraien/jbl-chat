@@ -14,11 +14,12 @@
             integrity="sha384-+sLIOodYLS7CIrQpBjl+C7nPvqq+FbNUBDunl/OZv93DB7Ln/533i8e/mZXLi/P+"
             crossorigin="anonymous"></script>
     {% htmx_script %}
+    <meta name="htmx-config" content='{"configRequest":"outerHTML"}'>
 </head>
-<body hx-headers='{"x-csrftoken": "{{ csrf_token }}"}'>
-<div class="container">
-    {% block main %}
-    {% endblock main %}
-</div>
+<body hx-headers='{"X-Requested-With": "XMLHttpRequest", "x-csrftoken": "{{ csrf_token }}"}'>
+    <div class="container">
+        {% block main %}
+        {% endblock main %}
+    </div>
 </body>
 </html>

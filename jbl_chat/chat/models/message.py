@@ -11,22 +11,24 @@ from chat.models import Conversation
 class MessageManager(models.QuerySet):
 
     def not_deleted(self):
-        return self.exclude(state__in=MSG_STATE.DELETED)
+        return self.exclude(state=MSG_STATE.DELETED)
+
+    def not_drafts(self):
+        return self.exclude(state=MSG_STATE.DRAFT)
 
 
 class Message(TimeStampedModel):
     objects = MessageManager.as_manager()
 
+    class Meta:
+        verbose_name = _("message")
+        verbose_name_plural = _("messages")
+        ordering = ["created"]
+
     author = models.ForeignKey(
         User,
         verbose_name=_("author"),
         related_name="authored_messages",
-        on_delete=models.CASCADE,
-    )
-    target = models.ForeignKey(
-        User,
-        verbose_name=_("target"),
-        related_name="received_messages",
         on_delete=models.CASCADE,
     )
     conversation = models.ForeignKey(

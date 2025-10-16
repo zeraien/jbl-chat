@@ -11,18 +11,28 @@ class ConversationController(ActionController):
 
     @login_required()
     def _before_filter(self, request):
+        self.users = User.objects.filter(is_active=True)
         self.messages = request.user.authored_messages.select_related(
-            "target", "author"
+            "author"
         ).not_deleted()
         self.conversations = request.user.conversations.all()
 
-    def index(self, request, id: int):
-        conversation: Conversation = get_object_or_404(self.conversations, pk=id)
+    def index(self, request, conversation_id: int):
+        conversation: Conversation = get_object_or_404(
+            self.conversations, pk=conversation_id
+        )
         return {
-            "id": id,
+            "conversation": conversation,
             "title": conversation.title,
-            "messages": conversation.messages.not_deleted(),
+            "messages": conversation.messages.not_deleted().not_drafts(),
         }
 
-    def delete(self, request):
-        pass
+    def user(self, request, user_id: id):
+        user = get_object_or_404(self.users, pk=user_id)
+        if user.pk == request.user.pk:
+            return self._print("Invalid user"), 400
+
+        conversation: Conversation = Conversation.objects.get_or_create_for_users(
+            users=[user, request.user]
+        )
+        return self._go(f"/conversation/{conversation.pk}/")

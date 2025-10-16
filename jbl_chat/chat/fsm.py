@@ -1,3 +1,4 @@
+from django.utils import timezone
 from viewflow import fsm
 
 from chat.enums import MSG_STATE
@@ -17,18 +18,6 @@ class MessageFlow:
     def _get_object_state(self):
         return self.object.state
 
-    @state.transition(source=MSG_STATE.SENT, target=MSG_STATE.RECEIVED)
-    def receive(self):
-        pass
-
-    @state.transition(source=MSG_STATE.RECEIVED, target=MSG_STATE.READ)
-    def mark_read(self):
-        pass
-
-    @state.transition(source=MSG_STATE.SENDING, target=MSG_STATE.SENT)
+    @state.transition(source=MSG_STATE.DRAFT, target=MSG_STATE.SENT)
     def mark_sent(self):
-        pass
-
-    @state.transition(source=MSG_STATE.DRAFT, target=MSG_STATE.SENDING)
-    def send(self):
-        pass
+        self.object.created = timezone.now()

@@ -1,0 +1,10 @@
+<div class='col-md-9 align-content-end' id="activeConversation">
+    <div class='col' id="activeConversationMessages" style='border: 1px solid red; overflow-y: scroll;'>
+    </div>
+    <div class='col'>
+        <div hx-get="/message/compose_box/{{conversation.pk}}/"
+             hx-trigger="load"
+             hx-swap="outerHTML">
+        </div>
+    </div>
+</div>

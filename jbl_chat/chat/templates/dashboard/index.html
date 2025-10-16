@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% load url_framework %}
+
+{% block main %}
+    <div class='row' style='height: 100vh; max-height: 100vh'>
+        <div class='col-md-3'>
+            <div class="list-group">
+                {% for user in users %}
+                    <button class='list-group-item list-group-item-action'
+                            hx-get="/conversation/user/{{ user.id }}"
+                            hx-target="#activeConversation"
+                            hx-swap="outerHTML"
+                            hx-push-url='false'
+                    >
+                        {#                  <a href="#" class="list-group-item list-group-item-action active" aria-current="true">#}
+                        {{ user }}
+                    </button>
+                {% endfor %}
+            </div>
+        </div>
+        <div id="activeConversation"
+             class='col-md-9 justify-content-center align-content-center'
+        >
+            <div class='d-flex justify-content-center'>
+                <h3><span
+                        class='badge badge-light'>Select a conversation to start chatting</span>
+                </h3>
+            </div>
+        </div>
+    </div>
+{% endblock %}
