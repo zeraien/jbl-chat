@@ -50,7 +50,9 @@ class MessageController(ActionController):
 
     def compose_box(self, request, conversation_id: int):
         conversation = get_object_or_404(self.conversations, pk=conversation_id)
-        draft_message = conversation.messages.filter(state=MSG_STATE.DRAFT).first()
+        draft_message = conversation.messages.filter(
+            author=request.user, state=MSG_STATE.DRAFT
+        ).first()
         if not draft_message:
             draft_message = Message.objects.create(
                 author=request.user, conversation=conversation, content=""
