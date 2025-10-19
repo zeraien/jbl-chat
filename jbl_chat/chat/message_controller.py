@@ -1,11 +1,10 @@
 from django.shortcuts import get_object_or_404
 from django_url_framework import ActionController
-from django_url_framework.decorators import json_action, login_required
+from django_url_framework.decorators import login_required
 
 from chat.enums import MSG_STATE
 from chat.fsm import MessageFlow
 from chat.models import Message, Conversation
-from jbl_chat.time_helpers import to_epoch
 
 
 class MessageController(ActionController):
@@ -17,10 +16,6 @@ class MessageController(ActionController):
         ).not_deleted()
         self.conversations = request.user.conversations.all()
 
-    def index(self, request, id: int):
-        message: Message = get_object_or_404(self.messages, pk=id)
-        return {"id": id, "content": message.content}
-
     def list(self, request, conversation_id: int):
         conversation: Conversation = get_object_or_404(
             self.conversations, pk=conversation_id
@@ -28,24 +23,6 @@ class MessageController(ActionController):
         return {
             "conversation": conversation,
             "messages": conversation.messages.not_deleted().not_drafts(),
-        }
-
-    def get(self, request, id: int):
-        message: Message = get_object_or_404(self.messages, pk=id)
-        return {"content": message.content}
-
-    @json_action()
-    def api__get(self, request, id: int):
-        message: Message = get_object_or_404(self.messages, pk=id)
-        author = message.author
-
-        return {
-            "author": {"id": author.pk, "name": author.get_full_name()},
-            "content": message.content,
-            "conversation_id": message.conversation_id,
-            "created": to_epoch(message.created),
-            "modified": to_epoch(message.modified),
-            "state": message.state,
         }
 
     def compose_box(self, request, conversation_id: int):
@@ -76,6 +53,3 @@ class MessageController(ActionController):
         message.content = request.POST["message_text"]
         message.save()
         return self._as_json(True)
-
-    def delete(self, request):
-        pass

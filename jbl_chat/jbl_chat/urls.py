@@ -13,15 +13,18 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
 from django.contrib import admin
 from django.urls import path
 import django_url_framework
+from django.views.generic import RedirectView
 
 django_url_framework.site.autodiscover()
 
 admin.site.site_header = "Le Chat by JBL"
 
 urlpatterns = [
+    path("", RedirectView.as_view(url="/dashboard/", permanent=True)),
     path("", django_url_framework.site.urls),
     path("admin/", admin.site.urls),
 ]

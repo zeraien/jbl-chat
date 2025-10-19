@@ -16,7 +16,7 @@ Incorporating HTMX will allow you to create dynamic, interactive elements on the
 
 Happy coding!
 
-# Thoughts
+# Thoughts by dimo
 
 ## Conversation
 The `Conversation` object, is it needed? Basically, if we're simply implementing messaging between 2 people,
@@ -39,4 +39,27 @@ The connection to the root message can also be deleted after a while, ensuring t
 affect other users messages, even if that message is in theory "the same".
 
 This is probably too advanced for our needs but I'm writing down my thoughts to keep it in my head hehe.
+
+## Soulless URL
+I don't like when you click on things in a page and the URL doesn't reflect this, so refreshing the
+page doesn't bring you back to where you were. Some sites solve this with sessions or local storage
+but I prefer to keep this in the URL, mainly through the use of hash data (beyond the #), which 
+also gives us history. 
+I noticed that htmx doesn't allow this easily but it can change the URL based on your needs,
+which does some weird hacking of local storage to store the dom, thus keeping history, I'm not
+sure i like this because then pressing back brings you back to a saved local state instead of a
+possibly updated remote state... either way, because the URLs used by htmx will return partials
+for the use of htmx, we will need to make sure that our backend can return the full needed page
+with the proper partial displayed for any URL that htmx "pushes" to the stack.
+Using `django-url-framework` for this might not be optimal and we would probably be better off
+using django's traditional views where we can more freely mess around with URL mapping to 
+different functions.
+
+## HTMX is a buggy mess
+Whether it's the `ws` module or `htmx` itself, the fact is that `hx-swap-oob` when used by the `ws`
+module is broken. If using anything other than `outerHTML` for swap strategy, it's supposed to remove
+the enclosing tags so when you specify `<div id='foo' hx-swap-oob='beforeend'>` it's supposed
+to insert the *contents* of the `foo` div at the end of the inside of the currently visible div,
+but what it does is just inserts the whole damn div creating a nested mess and multiple divs
+with the same id. ARGH.
 

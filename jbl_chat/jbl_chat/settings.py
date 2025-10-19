@@ -27,7 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1"]
 
-LOGIN_URL = "/admin/login/"
+LOGIN_URL = "/dashboard/login/"
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = LOGIN_URL
 

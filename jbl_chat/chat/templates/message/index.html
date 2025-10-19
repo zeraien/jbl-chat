@@ -1,9 +1,0 @@
-{% extends "base.html" %}
-
-{% block main %}
-    <div hx-get="/message/get/{{ id }}/"
-         hx-trigger="load delay:1s"
-         hx-swap="outerHTML">
-        Loading...
-    </div>
-{% endblock %}

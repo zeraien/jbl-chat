@@ -13,17 +13,83 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js"
             integrity="sha384-+sLIOodYLS7CIrQpBjl+C7nPvqq+FbNUBDunl/OZv93DB7Ln/533i8e/mZXLi/P+"
             crossorigin="anonymous"></script>
-{#    {% htmx_script %}#}
+
+    {#    {% htmx_script %}#}
     <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.7/dist/htmx.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/htmx-ext-ws@2.0.3/ws.min.js"></script>
     <script src="https://unpkg.com/idiomorph@0.7.3/dist/idiomorph-ext.min.js" integrity="sha384-szktAZju9fwY15dZ6D2FKFN4eZoltuXiHStNDJWK9+FARrxJtquql828JzikODob" crossorigin="anonymous"></script>
-{#    <script src="https://unpkg.com/htmx-ext-morphdom-swap@2.0.0/morphdom-swap.js"></script>#}
+
+    <style>
+        #sidebar {
+        }
+
+        #activeConversationMessages {
+            position:absolute;
+            overflow-y: scroll;
+            top: 0;
+            width: 100%;
+            height: 90%;
+        }
+        #composeBox {
+            position:absolute;
+            width: 100%;
+            bottom: 0;
+        }
+        #activeConversation {
+        }
+
+        .container.main {
+            margin-top: 65px;
+            position: absolute;
+            top: 20px;
+            left: 0;
+            right: 0;
+            bottom: 20px;
+            overflow: hidden;
+        }
+    </style>
+    <script type='text/javascript'>
+        htmx.on("htmx:load", function(evt) {
+            try {
+                $('#activeConversationMessages .last_message')[0].scrollIntoView();
+            } catch (e) {
+                // hacky way to avoid checking for the existence of .last_message
+            }
+        });
+        htmx.on("htmx:wsOpen", function(evt) {
+            $('#connectionStatus').attr('class','badge badge-success').text('CONNECTED');
+        });
+        htmx.on("htmx:wsConnecting", function(evt) {
+            $('#connectionStatus').attr('class','badge badge-warning').text('CONNECTING');
+        });
+        htmx.on("htmx:wsClose", function(evt) {
+            $('#connectionStatus').attr('class','badge badge-danger').text('DISCONNECTED');
+        });
+    </script>
+
 </head>
 <body hx-ext="ws,morph" hx-headers='{"X-Requested-With": "XMLHttpRequest", "x-csrftoken": "{{ csrf_token }}"}'>
-    <div class="container">
-        {% block main %}
-        {% endblock main %}
-    </div>
+<div class="fixed-top">
+    <nav class="navbar navbar-light bg-light navbar-fixed-top">
+        <a class="navbar-brand" href="#">{{request.user}} @ JblChat <span id='connectionStatus' class='badge badge-danger'>DISCONNECTED</span></a>
+        <div class='mr-auto'><!-- for login button alignment to the right --></div>
+        <div class="my-2 my-lg-0" >
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="btn btn-info" href="/dashboard/login/">LOGIN</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</div>
 
+<div class="container main">
+    {% block main %}
+    {% endblock main %}
+</div>
+
+<div class="fixed-bottom">
+<nav class="navbar navbar-fixed-bottom"></nav>
+</div>
 </body>
 </html>
