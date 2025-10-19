@@ -6,11 +6,20 @@ services:
       - ALLOW_EMPTY_PASSWORD=yes
     ports:
       - "6379:6379"
-#  web:
-#    build: .
-#    command: python jbl_chat/manage.py runserver 0.0.0.0:8000
-#    volumes:
-#      - .:/code
-#    ports:
-#      - "8000:8000"
+  web:
+    build: .
+    command: python jbl_chat/manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+  websockets:
+    build: .
+    environment:
+      DJANGO_SETTINGS_MODULE: "jbl_chat.settings"
+    command: python jbl_chat/websockets_notifier.py -H 0.0.0.0 -p 8888 -r redis
+    volumes:
+      - .:/code
+    ports:
+      - "8888:8888"
 

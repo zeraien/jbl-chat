@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+import argparse
+
 from django.contrib.auth import get_user_model
 from redis import asyncio as aioredis
 import asyncio
@@ -65,9 +67,9 @@ async def handler(websocket):
         del CONNECTIONS[websocket]
 
 
-async def process_events():
+async def process_events(redis_host: str, redis_port: int):
     """Listen to events in Redis and process them."""
-    redis = aioredis.from_url("redis://127.0.0.1:6379/1")
+    redis = aioredis.from_url(f"redis://{redis_host}:{redis_port}/1")
     pubsub = redis.pubsub()
     await pubsub.subscribe("events")
     async for message in pubsub.listen():
@@ -100,10 +102,25 @@ async def process_events():
             broadcast(data["websockets"], data["html"])
 
 
-async def main():
-    async with serve(handler, "localhost", 8888):
-        await process_events()  # runs forever
+async def main(hostname: str, port: int, redis_host: str, redis_port: int):
+    async with serve(handler, hostname, port):
+        await process_events(
+            redis_host=redis_host, redis_port=redis_port
+        )  # runs forever
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    parser = argparse.ArgumentParser(prog="WebsocketsNotifier")
+    parser.add_argument("-H", "--hostname", default="localhost")
+    parser.add_argument("-p", "--port", type=int, default="8888")
+    parser.add_argument("-r", "--redis_host", type=str, default="127.0.0.1")
+    parser.add_argument("--redis_port", type=int, default="6379")
+    args = parser.parse_args()
+    asyncio.run(
+        main(
+            hostname=args.hostname,
+            port=args.port,
+            redis_host=args.redis_host,
+            redis_port=args.redis_port,
+        )
+    )
