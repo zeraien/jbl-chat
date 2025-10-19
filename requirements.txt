@@ -6,5 +6,6 @@ ipython
 django-htmx~=1.2
 django-sesame~=3.2
 websockets~=15.0
-django-redis~=6.0.*
+django-redis~=6.0
 redis==6.4.*
+django-url-framework
