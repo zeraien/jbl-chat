@@ -20,6 +20,8 @@
             </div>
         </div>
     </div>
+{% empty %}
+    <div class='alert alert-info'>{{ _("No messages yet.") }}</div>
 {% endfor %}
 {#<!-- will be appended to #notifications div -->#}
 {#<div id="notifications" hx-swap-oob="beforeend">#}
