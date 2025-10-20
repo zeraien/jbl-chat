@@ -28,13 +28,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1"]
 
-LOGIN_URL = "/dashboard/login/"
-LOGIN_REDIRECT_URL = "/"
-LOGOUT_REDIRECT_URL = LOGIN_URL
-
-WEBSOCKETS_HOST = os.environ.get("WEBSOCKETS_HOST", None)
-WEBSOCKETS_PORT = os.environ.get("WEBSOCKETS_PORT", "8888")
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -91,10 +84,12 @@ SESAME_MAX_AGE = 180
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
+IS_DOCKER = os.environ.get("DOCKER_HOST") is not None
+
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "NAME": "%s/db.sqlite3" % (IS_DOCKER and "/db" or BASE_DIR),
     }
 }
 
@@ -134,3 +129,10 @@ STATIC_URL = "/static/"
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+LOGIN_URL = "/dashboard/login/"
+LOGIN_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = LOGIN_URL
+
+WEBSOCKETS_HOST = os.environ.get("WEBSOCKETS_HOST", None)
+WEBSOCKETS_PORT = os.environ.get("WEBSOCKETS_PORT", "8888")
