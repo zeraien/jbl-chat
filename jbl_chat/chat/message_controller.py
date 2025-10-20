@@ -40,11 +40,14 @@ class MessageController(ActionController):
     def send(self, request):
         message_id = request.POST["message_id"]
         message = get_object_or_404(self.messages, pk=message_id)
-        message.content = request.POST["message_text"]
+        message.content = request.POST.get("message_text", "").strip()
         conversation = message.conversation
-        flow = MessageFlow(message)
-        flow.mark_sent()
-        message.save()
+
+        if message.content != "":
+            flow = MessageFlow(message)
+            flow.mark_sent()
+            message.save()
+
         return self._go(f"/message/compose_box/{conversation.pk}/")
 
     def update(self, request):
