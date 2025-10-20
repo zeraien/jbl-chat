@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -31,6 +32,8 @@ LOGIN_URL = "/dashboard/login/"
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = LOGIN_URL
 
+WEBSOCKETS_HOST = os.environ.get("WEBSOCKETS_HOST", None)
+WEBSOCKETS_PORT = os.environ.get("WEBSOCKETS_PORT", "8888")
 
 # Application definition
 

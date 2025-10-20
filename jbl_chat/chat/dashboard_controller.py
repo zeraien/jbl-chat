@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.auth import get_user_model, login
 from django.shortcuts import get_object_or_404
 from django_url_framework import ActionController
@@ -11,6 +12,11 @@ class DashboardController(ActionController):
 
     def _before_filter(self, request):
         self.users = get_user_model().objects.filter(is_active=True)
+        return {
+            "websockets_host": settings.WEBSOCKETS_HOST
+            or request.get_host().split(":")[0],
+            "websockets_port": settings.WEBSOCKETS_PORT,
+        }
 
     @login_required()
     def index(self, request):
