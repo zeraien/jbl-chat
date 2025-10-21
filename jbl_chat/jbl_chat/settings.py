@@ -10,7 +10,6 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
-import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -26,12 +25,11 @@ SECRET_KEY = "django-insecure-(258e=*mmkc&ilwz_=cokrm9d!+z66nn_eoyw*u#@yv@e$2*zi
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1"]
-if os.environ.get("server_hostname"):
-    ALLOWED_HOSTS.append(os.environ.get("server_hostname"))
-if os.environ.get("DOCKER_HOST"):
-    ALLOWED_HOSTS.append(os.environ.get("DOCKER_HOST"))
+from .env_settings import *
 
+ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1"]
+if SITE_HOSTNAME:
+    ALLOWED_HOSTS.append(SITE_HOSTNAME)
 
 # Application definition
 
@@ -86,20 +84,13 @@ TEMPLATES = [
 WSGI_APPLICATION = "jbl_chat.wsgi.application"
 
 SESAME_MAX_AGE = 180
-# Database
-# https://docs.djangoproject.com/en/3.2/ref/settings/#databases
-
-IS_DOCKER = os.environ.get("DOCKER_HOST") is not None
 
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME": "%s/db.sqlite3" % (IS_DOCKER and "/db" or BASE_DIR),
+        "NAME": "%s/db.sqlite3" % (IS_HOSTED and "/db" or BASE_DIR),
     }
 }
-
-REDIS_HOST = os.environ.get("REDIS_HOST", "127.0.0.1")
-REDIS_PORT = os.environ.get("REDIS_PORT", "6379")
 
 CACHES = {
     "default": {
@@ -141,6 +132,3 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 LOGIN_URL = "/dashboard/login/"
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = LOGIN_URL
-
-WEBSOCKETS_HOST = os.environ.get("WEBSOCKETS_HOST", None)
-WEBSOCKETS_PORT = os.environ.get("WEBSOCKETS_PORT", "8888")
