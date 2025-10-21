@@ -26,6 +26,12 @@ class DashboardController(ActionController):
             "users": self.users.exclude(pk=request.user.pk),
         }
 
+    def sidebar(self, request, selected_user_id: int):
+        return {
+            "selected_user_id": selected_user_id,
+            "users": self.users.exclude(pk=request.user.pk),
+        }
+
     @ajax_template_name("dashboard/_conversation.html")
     def conversation__for_user(self, request, user_id: id):
         user = get_object_or_404(self.users, pk=user_id)
@@ -35,7 +41,10 @@ class DashboardController(ActionController):
         conversation: Conversation = Conversation.objects.get_or_create_for_users(
             users=[user, request.user]
         )
-        return {"conversation_id": conversation.pk}
+        return {
+            "user_id": user_id,
+            "conversation_id": conversation.pk,
+        }
 
     def login(self, request):
         if request.POST.get("user_id", "").strip() not in ("", None):
