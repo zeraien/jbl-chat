@@ -35,7 +35,12 @@ class MessageController(ActionController):
                 author=request.user, conversation=conversation, content=""
             )
 
-        return {"draft_message": draft_message}
+        return {
+            "draft_message": draft_message,
+            "conversation_name": str(
+                conversation.users.all().exclude(pk=request.user.pk).first()
+            ),
+        }
 
     def send(self, request):
         message_id = request.POST["message_id"]

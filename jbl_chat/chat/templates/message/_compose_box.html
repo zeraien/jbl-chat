@@ -1,4 +1,5 @@
-<form id="composeBox" method="POST" hx-post="/message/send/" hx-swap='outerHTML'>
+{% load i18n %}
+<form id="composeForm" method="POST" hx-post="/message/send/" hx-swap='outerHTML'>
     <input type='hidden' name='message_id' value='{{ draft_message.pk }}'/>
 
     <div class="row">
@@ -11,11 +12,11 @@
                    class="form-control"
                    id="chatMessageInput"
                    name='message_text'
-                   placeholder="{{ _("Your message") }}"
+                   placeholder="{% blocktranslate %}Write to {{ conversation_name }}{% endblocktranslate %}"
                    value="{{ draft_message.content }}">
         </div>
         <div class="col-2 d-grid gap-2">
-            <button type="submit" class='btn btn-primary '>
+            <button type="submit" class='btn btn-primary'>
                 Send
             </button>
         </div>
