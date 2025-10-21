@@ -13,10 +13,6 @@
             crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.7/dist/htmx.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/htmx-ext-ws@2.0.3/ws.min.js"></script>
-    <script src="https://unpkg.com/idiomorph@0.7.3/dist/idiomorph-ext.min.js"
-            integrity="sha384-szktAZju9fwY15dZ6D2FKFN4eZoltuXiHStNDJWK9+FARrxJtquql828JzikODob"
-            crossorigin="anonymous"></script>
-
     <style>
         #sidebar {
         }
@@ -66,7 +62,7 @@
     </script>
 
 </head>
-<body hx-ext="ws,morph"
+<body hx-ext="ws"
       hx-headers='{"X-Requested-With": "XMLHttpRequest", "x-csrftoken": "{{ csrf_token }}"}'>
 <div class="fixed-top">
     <nav class="navbar navbar-light bg-light navbar-fixed-top">
