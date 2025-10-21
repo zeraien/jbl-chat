@@ -1,0 +1,13 @@
+<h3>{{_("Conversations with")}}</h3>
+<div class="list-group">
+    {% for user in users %}
+        <button class='list-group-item list-group-item-action  {% if selected_user_id == user.pk %}active{% endif %}'
+                hx-get="/dashboard/conversation/for_user/{{ user.id }}/"
+                hx-target="#activeConversation"
+                hx-swap="innerHTML"
+                hx-push-url='false'
+        >
+            {{ user }}
+        </button>
+    {% endfor %}
+</div>
