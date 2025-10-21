@@ -55,11 +55,3 @@ Using `django-url-framework` for this might not be optimal and we would probably
 using django's traditional views where we can more freely mess around with URL mapping to 
 different functions.
 
-## HTMX is a buggy mess
-Whether it's the `ws` module or `htmx` itself, the fact is that `hx-swap-oob` when used by the `ws`
-module is broken. If using anything other than `outerHTML` for swap strategy, it's supposed to remove
-the enclosing tags so when you specify `<div id='foo' hx-swap-oob='beforeend'>` it's supposed
-to insert the *contents* of the `foo` div at the end of the inside of the currently visible div,
-but what it does is just inserts the whole damn div creating a nested mess and multiple divs
-with the same id. ARGH.
-
