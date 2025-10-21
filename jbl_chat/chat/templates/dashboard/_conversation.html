@@ -1,12 +1,15 @@
-<div class='col-9 d-flex flex-column align-content-end' id="activeConversation">
-    <div id="activeConversationMessages"
-         hx-get="/message/list/{{ conversation_id }}/"
-         hx-swap="scroll:bottom"
-         hx-trigger="load">
-    </div>
-    <div class='flex-grow-0' id='composeBox'>
-        <div hx-get="/message/compose_box/{{ conversation_id }}/"
-             hx-trigger="load">
-        </div>
-    </div>
+<div id="activeConversationMessages"
+     hx-get="/message/list/{{ conversation_id }}/"
+     hx-swap="innerHTML scroll:bottom"
+     hx-trigger="load">
+</div>
+<div id='composeBox'
+     hx-get="/message/compose_box/{{ conversation_id }}/"
+     hx-trigger="load">
+</div>
+<div id='sidebar'
+     class="col-md-3 col-sm-2"
+     hx-swap-oob="outerHTML"
+     hx-get="/dashboard/sidebar/{{ user_id }}/"
+     hx-trigger="load">
 </div>

@@ -9,19 +9,8 @@
           </form>
     </div>
     <div class='row' style='height: 100%;'>
-        <div id="sidebar" class='col-3'>
-            <div class="list-group">
-                {% for user in users %}
-                    <button class='list-group-item list-group-item-action'
-                            hx-get="/dashboard/conversation/for_user/{{ user.id }}"
-                            hx-target="#activeConversation"
-                            hx-swap="outerHTML"
-                            hx-push-url='false'
-                    >
-                        {{ user }}
-                    </button>
-                {% endfor %}
-            </div>
+        <div id="sidebar" class='col-md-3 col-sm-2'>
+            {% include "dashboard/_sidebar.html" %}
         </div>
         <div id="activeConversation"
              class='col-9 justify-content-center align-content-center'
