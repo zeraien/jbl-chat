@@ -18,18 +18,27 @@
         }
 
         #activeConversationMessages {
-            position:absolute;
             overflow-y: scroll;
+            overflow-x: hidden;
+            position: absolute;
             top: 0;
-            width: 100%;
+            left: 10px;
+            right: 10px;
             height: 90%;
+            display: flex;
+            flex-direction: column-reverse;
+            align-items: center;
         }
+
         #composeBox {
-            position:absolute;
-            width: 100%;
-            bottom: 0;
+            position: absolute;
+            left: 5px;
+            right: 5px;
+            bottom: 10px;
         }
+
         #activeConversation {
+            position: relative;
         }
 
         .container.main {
@@ -50,6 +59,8 @@
                 // hacky way to avoid checking for the existence of .last_message
             }
         });
+
+        // manage the websockets connection information badge
         htmx.on("htmx:wsOpen", function (evt) {
             $('#connectionStatus').attr('class', 'badge text-bg-success').text('CONNECTED');
         });
