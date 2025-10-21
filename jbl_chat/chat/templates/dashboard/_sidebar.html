@@ -1,5 +1,29 @@
-<h3>{{_("Conversations with")}}</h3>
-<div class="list-group">
+<h3 class='dropdown'>
+    {{ _("Conversations with") }}
+    <div id="conversationSelectDropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="userListMenu"
+                data-bs-toggle="dropdown" aria-expanded="false">
+            {% if selected_user %}{{ selected_user }}{% else %}select user{% endif %}
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="userListMenu">
+            {% for user in users %}
+                <li>
+                    <button type='button'
+                            class='dropdown-item {% if selected_user_id == user.pk %}active{% endif %}'
+                            hx-get="/dashboard/conversation/for_user/{{ user.id }}/"
+                            hx-target="#activeConversation"
+                            hx-swap="innerHTML"
+                            hx-push-url='false'
+                    >
+                        {{ user }}
+                    </button>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</h3>
+
+<div id="sidebarUserList" class="list-group">
     {% for user in users %}
         <button class='list-group-item list-group-item-action  {% if selected_user_id == user.pk %}active{% endif %}'
                 hx-get="/dashboard/conversation/for_user/{{ user.id }}/"

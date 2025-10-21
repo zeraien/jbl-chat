@@ -29,6 +29,7 @@ class DashboardController(ActionController):
     def sidebar(self, request, selected_user_id: int):
         return {
             "selected_user_id": selected_user_id,
+            "selected_user": get_object_or_404(self.users, pk=selected_user_id),
             "users": self.users.exclude(pk=request.user.pk),
         }
 

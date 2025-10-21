@@ -14,7 +14,44 @@
     <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.7/dist/htmx.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/htmx-ext-ws@2.0.3/ws.min.js"></script>
     <style>
+        #chatMain {
+            flex-direction: column;
+        }
+
         #sidebar {
+            flex: 0;
+        }
+
+        #conversationSelectDropdown
+        {
+            display: inline;
+        }
+
+        #sidebarUserList
+        {
+            display: none;
+        }
+
+        #activeConversation {
+            flex: 1 0;
+            position: relative;
+        }
+
+        @media (min-width: 576px) {
+            #chatMain {
+                flex-direction: row;
+            }
+            #conversationSelectDropdown
+            {
+                display: none;
+            }
+            #sidebar {
+                flex: 0 1 25%;
+            }
+            #sidebarUserList
+            {
+                display: inherit;
+            }
         }
 
         #activeConversationMessages {
@@ -32,13 +69,9 @@
 
         #composeBox {
             position: absolute;
-            left: 5px;
-            right: 5px;
+            left: 10px;
+            right: 10px;
             bottom: 10px;
-        }
-
-        #activeConversation {
-            position: relative;
         }
 
         .container.main {

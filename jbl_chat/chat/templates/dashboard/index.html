@@ -8,11 +8,11 @@
             <input type="hidden" name="token" value="{{ websockets_token }}">
           </form>
     </div>
-    <div class='row' style='height: 100%;'>
-        <div id="sidebar" class='col-md-3 col-sm-2'>
+    <div id="chatMain" class='row' style='height: 100%;'>
+        <div id="sidebar">
             {% include "dashboard/_sidebar.html" %}
         </div>
-        <div id="activeConversation" class='col-md-9 col-sm-10'>
+        <div id="activeConversation" >
             <div class='d-flex w-100 h-100 align-items-center justify-content-center'>
                 <div class='badge text-bg-light text-muted fs-3' >Select a conversation to start chatting</div>
             </div>
