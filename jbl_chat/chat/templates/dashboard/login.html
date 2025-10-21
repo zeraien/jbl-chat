@@ -2,20 +2,18 @@
 
 {% block main %}
     <div id="userList" class='d-flex justify-content-center align-content-center'>
-    <div class="list-group">
-        {% for user in users %}
-            <form id="userLoginForm_{{user.pk}}" method="POST" action="/dashboard/login/">
-            {% csrf_token %}
-
-            <input type='hidden' name='user_id' value='{{user.pk}}'/>
-            </form>
-            <button class='list-group-item list-group-item-action'
-                    onClick="$('#userLoginForm_{{user.pk}}').submit()"
-[            >
-                {#                  <a href="#" class="list-group-item list-group-item-action active" aria-current="true">#}
-                {{ user }}
-            </button>
-        {% endfor %}
-    </div>
+        <div class="list-group list-group-horizontal">
+            {% for user in users %}
+                <form id="userLoginForm_{{ user.pk }}" method="POST" action="/dashboard/login/">
+                    {% csrf_token %}
+                    <input type='hidden' name='user_id' value='{{ user.pk }}'/>
+                </form>
+                <button class='list-group-item list-group-item-action {% if user.pk == request.user.pk %}active{% endif %}'
+                        onClick="$('#userLoginForm_{{ user.pk }}').submit()"
+                >
+                    {{ user }}
+                </button>
+            {% endfor %}
+        </div>
     </div>
 {% endblock %}

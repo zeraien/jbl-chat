@@ -1,29 +1,23 @@
-{% for message in messages %}
-    <div class='col-12 {{forloop.last|yesno:"last_message,regular_message"}}'>
+{% for message in messages.reverse %}
+    <div class='w-100 {% if forloop.first %}last_message{% endif %}'>
         <div class='row'>
             <div class='col'>
                 <small class='muted'>
                     from
-                    <b>{{ message.author }}</b>
+                    <b>{% if message.author == user %}{{ _("you") }}{% else %}{{ message.author }}{% endif %}</b>
                     @
                 </small>
                 {% include "_mixin_msg_time.html" %}
             </div>
         </div>
         <div class='row'>
-            {% if message.author.pk == user.pk %}
-            <div class='alert alert-info col-md-12'>
-            {% else %}
-            <div class='alert alert-dark col-md-12'>
-            {% endif %}
-                {{ message.content }}
+            <div class='col'>
+                <div class='alert {% if message.author.pk == user.pk %}alert-info{% else %}alert-dark{% endif %} col-md-12'>
+                    {{ message.content }}
+                </div>
             </div>
         </div>
     </div>
 {% empty %}
     <div class='alert alert-info'>{{ _("No messages yet.") }}</div>
 {% endfor %}
-{#<!-- will be appended to #notifications div -->#}
-{#<div id="notifications" hx-swap-oob="beforeend">#}
-{#    New message received#}
-{#</div>#}
