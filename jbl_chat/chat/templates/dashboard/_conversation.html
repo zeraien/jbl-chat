@@ -2,13 +2,16 @@
      hx-get="/message/list/{{ conversation_id }}/"
      hx-swap="innerHTML scroll:bottom"
      hx-trigger="load">
+    {% include "_spinner.html" %}
 </div>
 <div id='composeBox'
      hx-get="/message/compose_box/{{ conversation_id }}/"
      hx-trigger="load">
+    {% include "_spinner.html" %}
 </div>
 <div id='sidebar'
      hx-swap-oob="outerHTML"
      hx-get="/dashboard/sidebar/{{ user_id }}/"
      hx-trigger="load">
+    {% include "_spinner.html" %}
 </div>
