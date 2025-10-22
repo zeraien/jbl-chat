@@ -3,7 +3,7 @@
 {% block main %}
     <div id="userList" class='text-center'>
         <h3>{{ _("Please select a user to login as") }}</h3>
-        <div class="list-group list-group-horizontal">
+        <div class="list-group">
             {% for user in users %}
                 <form id="userLoginForm_{{ user.pk }}" method="POST" action="/dashboard/login/">
                     {% csrf_token %}
